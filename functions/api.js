@@ -62,6 +62,6 @@ function iterableRequest(config,res) {
         });
 }
 
-app.use('/', router);
+app.use('/api/', router);
 
 module.exports.handler = serverless(app);
