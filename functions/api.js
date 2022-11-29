@@ -56,9 +56,11 @@ function iterableRequest(config,res) {
     axios(config)
         .then(function (response) {
             res.status(response.status).send(response.data)
+            console.log(arguments.callee.caller.name,config)
         })
         .catch(function (error) {
             res.status(500).send({ error: error })
+            console.log(arguments.callee.caller.name,error)
         });
 }
 
