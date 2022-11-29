@@ -12,3 +12,5 @@ module.exports = function(app) {
         next();
     })
 }
+
+//todo check ip address to make sure is registered

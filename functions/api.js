@@ -13,57 +13,60 @@ var config = {
     }
 };
 
-router.get('/', (req, res) => {
-    config.url = process.env.DESTINATION_API_ENDPOINT + '/campaigns/metrics';
-    iterableRequest(config,res);
-})
+function get(endpoint) {
+    return (req, res) => {
+        config.url = process.env.DESTINATION_API_ENDPOINT + endpoint;
+        iterableRequest(config, res);
+    }
+}
 
-router.get('/campaigns/metrics', (req, res) => {
-    config.url = process.env.DESTINATION_API_ENDPOINT + '/campaigns/metrics';
-    iterableRequest(config,res);
-})
+function getWithParam(endpointBuilder) {
+    return (req, res) => {
+        config.url = process.env.DESTINATION_API_ENDPOINT + endpointBuilder(req.params);
+        iterableRequest(config, res);
+    }
+}
 
-router.get('/channels' , (req , res) => {
-    config.url = process.env.DESTINATION_API_ENDPOINT + '/channels';
-    iterableRequest(config,res);
-})
+function post(endpoint) {
+    return (req, res) => {
+        config.url = process.env.DESTINATION_API_ENDPOINT + endpoint;
+        config.method = 'post';
+        config.data = req.body;
+        iterableRequest(config, res);
+    }
+}
 
-router.get('/messageTypes', (req , res) => {
-    config.url = process.env.DESTINATION_API_ENDPOINT + '/messageTypes';
-    iterableRequest(config,res);
-})
+router.get('/', get('/'))
 
-router.get('/users/:email', (req , res) => {
-    config.url = process.env.DESTINATION_API_ENDPOINT + `/users/${req.params.email}`;
-    iterableRequest(config,res);
-})
+router.get('/campaigns/metrics', get('/campaigns/metrics'))
 
-router.post('/users/update', (req , res) => {
-    config.url = process.env.DESTINATION_API_ENDPOINT + `/users/update`;
-    config.method = 'post';
-    config.data = req.body;
-    iterableRequest(config,res);
-})
+router.get('/channels', get('/channels'))
 
-router.post('/users/updateSubscriptions', (req , res) => {
-    config.url = process.env.DESTINATION_API_ENDPOINT + `/users/updateSubscriptions`;
-    config.method = 'post';
-    config.data = req.body;
-    iterableRequest(config,res);
-})
+router.get('/messageTypes', get('/messageTypes'))
 
-function iterableRequest(config,res) {
+router.get('/users/:email', getWithParam(params => `/users/${params.email}`))
+
+router.post('/users/update', post(`/users/update`))
+
+router.post('/users/updateSubscriptions', post(`/users/updateSubscriptions`))
+
+function iterableRequest(config, res) {
     axios(config)
         .then(function (response) {
             res.status(response.status).send(response.data)
-            console.log(arguments.callee.caller.name,config)
+            console.log("ok", config)
         })
         .catch(function (error) {
             res.status(500).send({ error: error })
-            console.log(arguments.callee.caller.name,error)
+            console.log("error", config.url, error)
         });
 }
 
-app.use('/api/', router);
+app.use('', router);
 
 module.exports.handler = serverless(app);
+
+// module.exports.handler = (event, context) => {
+//     console.log(event.path)
+//     return {A:"a"}
+// }
