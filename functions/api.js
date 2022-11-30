@@ -66,9 +66,9 @@ function iterableRequest(config, res) {
 
 app.use('', router);
 
-module.exports.handler = serverless(app);
+//module.exports.handler = serverless(app);
 
-// module.exports.handler = (event, context) => {
-//     console.log(event.path)
-//     return {A:"a"}
-// }
+module.exports.handler = (event, context) => {
+    console.log(event.path)
+    return {A:"a"}
+}
