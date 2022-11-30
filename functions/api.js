@@ -15,6 +15,7 @@ var config = {
 
 function get(endpoint) {
     return (req, res) => {
+        console.log(endpoint)
         config.url = process.env.DESTINATION_API_ENDPOINT + endpoint;
         iterableRequest(config, res);
     }
@@ -29,6 +30,7 @@ function getWithParam(endpointBuilder) {
 
 function post(endpoint) {
     return (req, res) => {
+        console.log(endpoint)
         config.url = process.env.DESTINATION_API_ENDPOINT + endpoint;
         config.method = 'post';
         config.data = req.body;
