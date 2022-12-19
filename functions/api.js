@@ -39,33 +39,35 @@ function post(endpoint) {
     }
 }
 
-router.get('/', get('/'))
+router.get('/api/', get('/api/'))
 
-router.get('/campaigns/metrics', get('/campaigns/metrics'))
+router.get('/api/campaigns/metrics', get('/api/campaigns/metrics'))
 
-router.get('/channels', get('/channels'))
+router.get('/api/channels', get('/api/channels'))
 
-router.get('/messageTypes', get('/messageTypes'))
+router.get('/api/messageTypes', get('/api/messageTypes'))
 
-router.get('/users/:email', getWithParam(params => `/users/${params.email}`))
+router.get('/api/users/:email', getWithParam(params => `/api/users/${params.email}`))
 
-router.post('/users/update', post(`/users/update`))
+router.post('/api/users/update', post(`/api/users/update`))
 
-router.post('/users/updateSubscriptions', post(`/users/updateSubscriptions`))
+router.post('/api/users/updateSubscriptions', post(`/api/users/updateSubscriptions`))
 
 function iterableRequest(config, res) {
     axios(config)
         .then(function (response) {
             res.status(response.status).send(response.data)
-            console.log("okIterableRequest", config)
+          //  console.log("okIterableRequest", config)
         })
         .catch(function (error) {
             res.status(500).send({ error: error })
-            console.log("errorIterableRequest", config.url, error)
+          //  console.log("node verion",process.version)
+            console.log("errorIterableRequest", config.url)
+            
         });
 }
 
-app.use('/api', router);
+app.use('/', router);
 
 module.exports.handler = serverless(app);
 
