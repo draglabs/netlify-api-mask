@@ -15,8 +15,9 @@ var config = {
 
 function get(endpoint) {
     return (req, res) => {
-        console.log(endpoint)
+        
         config.url = process.env.DESTINATION_API_ENDPOINT + endpoint;
+        console.log({"getEndpoint":config.url})
         iterableRequest(config, res);
     }
 }
@@ -56,11 +57,11 @@ function iterableRequest(config, res) {
     axios(config)
         .then(function (response) {
             res.status(response.status).send(response.data)
-            console.log("ok", config)
+            console.log("okIterableRequest", config)
         })
         .catch(function (error) {
             res.status(500).send({ error: error })
-            console.log("error", config.url, error)
+            console.log("errorIterableRequest", config.url, error)
         });
 }
 
