@@ -18,6 +18,7 @@ function get(endpoint) {
         
         config.url = process.env.DESTINATION_API_ENDPOINT + endpoint;
         console.log({"getEndpoint":config.url})
+        config.method = 'get';
         iterableRequest(config, res);
     }
 }
@@ -25,6 +26,7 @@ function get(endpoint) {
 function getWithParam(endpointBuilder) {
     return (req, res) => {
         config.url = process.env.DESTINATION_API_ENDPOINT + endpointBuilder(req.params);
+        config.method = 'get';
         iterableRequest(config, res);
     }
 }
@@ -63,6 +65,7 @@ function iterableRequest(config, res) {
             res.status(500).send({ error: error })
           //  console.log("node verion",process.version)
             console.log("errorIterableRequest", config.url)
+            //console.log("errorIterableRequest", error)
             
         });
 }
